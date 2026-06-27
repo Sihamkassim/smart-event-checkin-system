@@ -2,6 +2,7 @@ import User from './User';
 import Event from './Event';
 import Visitor from './Visitor';
 import CheckInLog from './CheckInLog';
+import SystemStat from './SystemStat';
 
 // User - Event (no direct relation needed)
 
@@ -35,4 +36,4 @@ CheckInLog.belongsTo(Visitor, {
   as: 'visitor',
 });
 
-export { User, Event, Visitor, CheckInLog };
+export { User, Event, Visitor, CheckInLog, SystemStat };
