@@ -1,4 +1,5 @@
 import app from './src/app';
+
 import  sequelize  from './src/config/database';
 import { startStatsCron } from "./src/cron/statsCron";
 
@@ -13,6 +14,8 @@ const startServer = async () => {
     // Sync database (use { alter: true } for development)
     await sequelize.sync({ alter: true });
     console.log('✅ Database synchronized');
+
+    // Routes
 
     // Start cron jobs
     startStatsCron();

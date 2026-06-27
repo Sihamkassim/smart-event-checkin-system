@@ -10,4 +10,9 @@ export const statsAPI = {
     const response = await apiClient.post('/stats/ask', { question });
     return response.data;
   },
+
+  askEventAi: async (eventId, question) => {
+    const response = await apiClient.post(`/events/${eventId}/assistant`, { question });
+    return response.data;
+  },
 };

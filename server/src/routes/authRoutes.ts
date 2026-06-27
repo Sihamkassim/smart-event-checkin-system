@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { login, getMe } from '../controllers/authController';
+import { login, getMe, setupPassword } from '../controllers/authController';
 import { authenticate } from '../middleware/auth';
 
 const router = Router();
@@ -101,5 +101,33 @@ router.post('/login', login);
  *               $ref: '#/components/schemas/Error'
  */
 router.get('/me', authenticate, getMe);
+
+/**
+ * @swagger
+ * /api/auth/setup-password:
+ *   post:
+ *     summary: Setup password for a new staff account via activation token
+ *     tags: [Authentication]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - token
+ *               - password
+ *             properties:
+ *               token:
+ *                 type: string
+ *               password:
+ *                 type: string
+ *     responses:
+ *       200:
+ *         description: Password set successfully
+ *       400:
+ *         description: Invalid or expired token
+ */
+router.post('/setup-password', setupPassword);
 
 export default router;

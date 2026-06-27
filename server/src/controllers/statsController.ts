@@ -48,3 +48,19 @@ export const askAi = async (req: AuthRequest, res: Response) => {
     res.status(500).json({ success: false, message: 'Server error' });
   }
 };
+
+export const askEventAi = async (req: AuthRequest, res: Response) => {
+  try {
+    const { id } = req.params;
+    const { question } = req.body;
+    
+    if (!id) return res.status(400).json({ success: false, message: 'Event ID is required' });
+    if (!question) return res.status(400).json({ success: false, message: 'Question is required' });
+
+    const result = await AiService.askEventAI(parseInt(id), question);
+    if (!result.success) return res.status(400).json(result);
+    res.json(result);
+  } catch (error) {
+    res.status(500).json({ success: false, message: 'Server error' });
+  }
+};

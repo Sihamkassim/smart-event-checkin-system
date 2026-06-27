@@ -27,6 +27,18 @@ export const useVisitorStore = defineStore('visitor', () => {
     }
   };
 
+  const exportVisitors = async (eventId) => {
+    isLoading.value = true;
+    try {
+      await visitorsAPI.export(eventId);
+      return { success: true };
+    } catch (err) {
+      return { success: false };
+    } finally {
+      isLoading.value = false;
+    }
+  };
+
   const createVisitor = async (eventId, visitorData) => {
     isLoading.value = true;
     try {
@@ -95,6 +107,7 @@ export const useVisitorStore = defineStore('visitor', () => {
     isLoading,
     fetchVisitorsByEvent,
     searchVisitors,
+    exportVisitors,
     createVisitor,
     bulkCreateVisitors,
     updateVisitor,

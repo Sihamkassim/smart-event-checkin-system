@@ -8,6 +8,12 @@ const routes = [
     meta: { requiresAuth: false, layout: 'auth' },
   },
   {
+    path: '/setup-password',
+    name: 'SetupPassword',
+    component: () => import('../pages/auth/SetupPasswordPage.vue'),
+    meta: { requiresAuth: false, layout: 'auth' },
+  },
+  {
     path: '/',
     name: 'Dashboard',
     component: () => import('../pages/dashboard/DashboardPage.vue'),
@@ -29,6 +35,12 @@ const routes = [
     path: '/checkin',
     name: 'CheckIn',
     component: () => import('../pages/checkin/CheckInPage.vue'),
+    meta: { requiresAuth: true, layout: 'main' },
+  },
+  {
+    path: '/staff',
+    name: 'Staff',
+    component: () => import('../pages/staff/StaffPage.vue'),
     meta: { requiresAuth: true, layout: 'main' },
   },
   {

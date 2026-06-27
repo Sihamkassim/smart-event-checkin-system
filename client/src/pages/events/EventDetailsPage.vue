@@ -19,11 +19,22 @@
       </div>
       
       <div class="flex gap-3">
-        <a-button size="large" @click="handleEdit" class="rounded-lg">
+        <a-button 
+          v-if="user?.role === 'admin'"
+          size="large" 
+          @click="handleEdit" 
+          class="rounded-lg"
+        >
           <template #icon><EditOutlined /></template>
           Edit Event
         </a-button>
-        <a-button type="primary" size="large" @click="goToCheckIn" class="bg-emerald-500 hover:bg-emerald-600 rounded-lg shadow-md shadow-emerald-500/20">
+        <a-button 
+          v-if="canCheckIn"
+          type="primary" 
+          size="large" 
+          @click="goToCheckIn" 
+          class="bg-emerald-500 hover:bg-emerald-600 rounded-lg shadow-md shadow-emerald-500/20"
+        >
           <template #icon><ScanOutlined /></template>
           Scanner Mode
         </a-button>
@@ -54,11 +65,29 @@
               <div class="flex items-center justify-between mb-4">
                 <h3 class="text-lg font-bold text-slate-800">Attendee List</h3>
                 <div class="flex gap-2">
-                  <a-button @click="showBulkImport = true" class="rounded-lg border-brand-200 text-brand-600 hover:border-brand-500 hover:text-brand-500">
+                  <a-button 
+                    v-if="canManageVisitors"
+                    @click="showBulkImport = true" 
+                    class="rounded-lg border-brand-200 text-brand-600 hover:border-brand-500 hover:text-brand-500"
+                  >
                     <template #icon><UploadOutlined /></template>
                     Import CSV/Excel
                   </a-button>
-                  <a-button type="primary" @click="showAddVisitor = true" class="bg-brand-500 hover:bg-brand-600 rounded-lg">
+                  <a-button 
+                    v-if="canManageVisitors"
+                    @click="exportVisitorsCsv" 
+                    class="rounded-lg border-brand-200 text-brand-600 hover:border-brand-500 hover:text-brand-500"
+                    :loading="isExporting"
+                  >
+                    <template #icon><DownloadOutlined /></template>
+                    Export CSV
+                  </a-button>
+                  <a-button 
+                    v-if="canManageVisitors"
+                    type="primary" 
+                    @click="showAddVisitor = true" 
+                    class="bg-brand-500 hover:bg-brand-600 rounded-lg"
+                  >
                     <template #icon><UserAddOutlined /></template>
                     Add Visitor
                   </a-button>
@@ -124,6 +153,9 @@
         @cancel="showBulkImport = false" 
       />
     </a-modal>
+
+    <!-- Event AI Assistant -->
+    <AiAssistantWidget v-if="canUseAi && event" :event-id="event.id" />
   </div>
 </template>
 
@@ -131,13 +163,16 @@
 import { ref, onMounted, computed } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { useEventStore } from '../../stores/useEventStore';
+import { useAuthStore } from '../../stores/useAuthStore';
 import EventStatsCards from '../../components/events/EventStatsCards.vue';
 import VisitorList from '../../components/visitors/VisitorList.vue';
 import VisitorForm from '../../components/visitors/VisitorForm.vue';
 import VisitorStatusBadge from '../../components/visitors/VisitorStatusBadge.vue';
 import EventForm from '../../components/events/EventForm.vue';
+import { useVisitorStore } from '../../stores/useVisitorStore';
 import BulkImportModal from '../../components/visitors/BulkImportModal.vue';
 import LoadingSpinner from '../../components/common/LoadingSpinner.vue';
+import AiAssistantWidget from '../../components/dashboard/AiAssistantWidget.vue';
 import { 
   ArrowLeftOutlined, 
   CalendarOutlined, 
@@ -147,22 +182,31 @@ import {
   InfoCircleOutlined,
   EnvironmentOutlined,
   UserAddOutlined,
-  UploadOutlined
+  UploadOutlined,
+  DownloadOutlined
 } from '@ant-design/icons-vue';
 import dayjs from 'dayjs';
 
 const route = useRoute();
 const router = useRouter();
 const eventStore = useEventStore();
+const authStore = useAuthStore();
+const visitorStore = useVisitorStore();
 
 const activeTab = ref('visitors');
 const showAddVisitor = ref(false);
 const showEditEvent = ref(false);
 const showBulkImport = ref(false);
+const isExporting = ref(false);
 
+const user = computed(() => authStore.user);
 const event = computed(() => eventStore.currentEvent);
 const eventStats = computed(() => eventStore.eventStats || {});
 const isLoading = computed(() => eventStore.isLoading);
+
+const canCheckIn = computed(() => user.value?.role === 'admin' || user.value?.permissions?.includes('checkin'));
+const canManageVisitors = computed(() => user.value?.role === 'admin' || user.value?.permissions?.includes('manage_visitors'));
+const canUseAi = computed(() => user.value?.role === 'admin' || user.value?.permissions?.includes('use_ai'));
 
 const formatDate = (dateString) => {
   if (!dateString) return '';
@@ -196,6 +240,18 @@ const handleBulkImported = () => {
 const handleEventEdited = () => {
   showEditEvent.value = false;
   eventStore.fetchEventById(route.params.id);
+};
+
+const exportVisitorsCsv = async () => {
+  if (!event.value?.id) return;
+  try {
+    isExporting.value = true;
+    await visitorStore.exportVisitors(event.value.id);
+  } catch (error) {
+    console.error('Export failed:', error);
+  } finally {
+    isExporting.value = false;
+  }
 };
 
 onMounted(async () => {

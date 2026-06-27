@@ -6,7 +6,13 @@
         <p class="text-slate-500 mt-1">Create and manage your events and check-ins.</p>
       </div>
       
-      <a-button type="primary" size="large" @click="handleCreate" class="bg-brand-500 hover:bg-brand-600 rounded-lg shadow-md shadow-brand-500/20">
+      <a-button 
+        v-if="user?.role === 'admin'"
+        type="primary" 
+        size="large" 
+        @click="handleCreate" 
+        class="bg-brand-500 hover:bg-brand-600 rounded-lg shadow-md shadow-brand-500/20"
+      >
         <template #icon><PlusOutlined /></template>
         New Event
       </a-button>
@@ -61,11 +67,15 @@ import { ref, computed, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
 import { PlusOutlined } from '@ant-design/icons-vue';
 import { useEventStore } from '../../stores/useEventStore';
+import { useAuthStore } from '../../stores/useAuthStore';
 import EventList from '../../components/events/EventList.vue';
 import EventForm from '../../components/events/EventForm.vue';
 
 const router = useRouter();
 const eventStore = useEventStore();
+const authStore = useAuthStore();
+
+const user = computed(() => authStore.user);
 
 const searchQuery = ref('');
 const statusFilter = ref('all');

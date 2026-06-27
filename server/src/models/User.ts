@@ -8,10 +8,13 @@ interface UserAttributes {
   email: string;
   password_hash: string;
   role: 'admin' | 'staff';
+  status: 'pending' | 'active';
+  permissions: string[];
+  activation_token: string | null;
   created_at: Date;
 }
 
-interface UserCreationAttributes extends Optional<UserAttributes, 'id' | 'created_at'> {}
+interface UserCreationAttributes extends Optional<UserAttributes, 'id' | 'created_at' | 'status' | 'permissions' | 'activation_token'> {}
 
 class User extends Model<UserAttributes, UserCreationAttributes> implements UserAttributes {
   public id!: number;
@@ -19,6 +22,9 @@ class User extends Model<UserAttributes, UserCreationAttributes> implements User
   public email!: string;
   public password_hash!: string;
   public role!: 'admin' | 'staff';
+  public status!: 'pending' | 'active';
+  public permissions!: string[];
+  public activation_token!: string | null;
   public created_at!: Date;
 
   // Method to check password
@@ -53,6 +59,18 @@ User.init(
     role: {
       type: DataTypes.ENUM('admin', 'staff'),
       defaultValue: 'staff',
+    },
+    status: {
+      type: DataTypes.ENUM('pending', 'active'),
+      defaultValue: 'active',
+    },
+    permissions: {
+      type: DataTypes.JSON,
+      defaultValue: [],
+    },
+    activation_token: {
+      type: DataTypes.STRING(255),
+      allowNull: true,
     },
     created_at: {
       type: DataTypes.DATE,

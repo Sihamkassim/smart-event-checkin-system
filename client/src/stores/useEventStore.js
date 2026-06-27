@@ -80,7 +80,7 @@ export const useEventStore = defineStore('event', () => {
     isLoading.value = true;
     try {
       const response = await eventsAPI.getStats(id);
-      eventStats.value = response;
+      eventStats.value = response.stats || response;
     } finally {
       isLoading.value = false;
     }

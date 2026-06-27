@@ -42,8 +42,13 @@ apiClient.interceptors.response.use(
     if (error.response?.status === 401) {
       localStorage.removeItem(TOKEN_KEY);
       localStorage.removeItem(USER_KEY);
-      message.warning('Session expired. Please login again.');
-      window.location.href = '/login';
+      
+      // Only redirect if not on login page and not a login request
+      const isLoginRequest = error.config?.url?.includes('/auth/login');
+      if (!isLoginRequest && window.location.pathname !== '/login') {
+        message.warning('Session expired. Please login again.');
+        window.location.href = '/login';
+      }
     }
     
     // Handle 403 - forbidden

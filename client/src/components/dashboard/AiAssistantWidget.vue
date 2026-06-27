@@ -73,6 +73,13 @@ import { MessageOutlined, RobotOutlined, CloseOutlined, SendOutlined } from '@an
 import { useStatsStore } from '../../stores/useStatsStore';
 import { marked } from 'marked';
 
+const props = defineProps({
+  eventId: {
+    type: [Number, String],
+    default: null
+  }
+});
+
 const statsStore = useStatsStore();
 const isOpen = ref(false);
 const inputQuery = ref('');
@@ -81,7 +88,7 @@ const chatContainer = ref(null);
 const isAiLoading = computed(() => statsStore.isAiLoading);
 
 const messages = ref([
-  { role: 'ai', content: 'Hello! I am your AI assistant. You can ask me questions about historical system stats and event attendance.' }
+  { role: 'ai', content: props.eventId ? 'Hello! I am your Event AI assistant. You can ask me questions about this specific event\'s statistics.' : 'Hello! I am your AI assistant. You can ask me questions about historical system stats and event attendance.' }
 ]);
 
 const renderMarkdown = (text) => {
@@ -102,7 +109,7 @@ const sendMessage = async () => {
   scrollToBottom();
 
   // Call API
-  const response = await statsStore.askAiAssistant(query);
+  const response = await statsStore.askAiAssistant(query, props.eventId);
   
   if (response && response.answer) {
     messages.value.push({ role: 'ai', content: response.answer });

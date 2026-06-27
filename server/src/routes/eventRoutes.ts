@@ -7,6 +7,7 @@ import {
   deleteEvent,
   getEventStats,
 } from '../controllers/eventController';
+import { askEventAi } from '../controllers/statsController';
 import { authenticate, authorize } from '../middleware/auth';
 import { upload } from '../middleware/upload';
 
@@ -180,5 +181,37 @@ router.delete('/:id', authorize('admin'), deleteEvent);
  *         description: Event not found
  */
 router.get('/:id/stats', getEventStats);
+
+/**
+ * @swagger
+ * /api/events/{id}/assistant:
+ *   post:
+ *     summary: Ask event-specific AI Assistant
+ *     description: Query the AI assistant about specific event data
+ *     tags: [Events]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               question:
+ *                 type: string
+ *     responses:
+ *       200:
+ *         description: AI-generated answer
+ *       400:
+ *         description: Missing question
+ */
+router.post('/:id/assistant', askEventAi);
 
 export default router;

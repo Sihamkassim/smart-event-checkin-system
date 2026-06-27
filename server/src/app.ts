@@ -10,6 +10,7 @@ import eventRoutes from './routes/eventRoutes';
 import visitorRoutes from './routes/visitorRoutes';
 import checkinRoutes from './routes/checkinRoutes';
 import statsRoutes from './routes/statsRoutes';
+import userRoutes from './routes/userRoutes';
 
 dotenv.config();
 
@@ -26,7 +27,11 @@ app.use('/uploads', express.static('uploads'));
 
 // Request logging
 app.use((req: Request, res: Response, next: NextFunction) => {
-  console.log(`${req.method} ${req.path}`);
+  const start = Date.now();
+  res.on('finish', () => {
+    const duration = Date.now() - start;
+    console.log(`[${new Date().toISOString()}] ${req.method} ${req.originalUrl} ${res.statusCode} - ${duration}ms`);
+  });
   next();
 });
 
@@ -48,6 +53,7 @@ app.use('/api/events', eventRoutes);
 app.use('/api/visitors', visitorRoutes);
 app.use('/api/check-in', checkinRoutes);
 app.use('/api/stats', statsRoutes);
+app.use('/api/users', userRoutes);
 
 // 404 handler
 app.use((req: Request, res: Response) => {

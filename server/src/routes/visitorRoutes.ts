@@ -6,6 +6,7 @@ import {
   updateVisitor,
   deleteVisitor,
   searchVisitors,
+  exportVisitors,
 } from '../controllers/visitorController';
 import { authenticate, authorize } from '../middleware/auth';
 
@@ -66,6 +67,31 @@ router.use(authenticate);
  */
 router.get('/:eventId/visitors', getVisitors);
 
+/**
+ * @swagger
+ * /api/visitors/{eventId}/export:
+ *   get:
+ *     summary: Export all visitors for a specific event as CSV
+ *     tags: [Visitors]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: eventId
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: Event ID
+ *     responses:
+ *       200:
+ *         description: CSV file download
+ *         content:
+ *           text/csv:
+ *             schema:
+ *               type: string
+ *               format: binary
+ */
+router.get('/:eventId/export', exportVisitors);
 /**
  * @swagger
  * /api/visitors/{eventId}/visitors/search:

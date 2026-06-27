@@ -21,15 +21,14 @@
       <StatisticsCards :stats="dashboardStats" />
 
       <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mt-6">
-        <div class="lg:col-span-2">
+        <div class="lg:col-span-2" v-if="user?.role === 'admin'">
           <LatestCheckIns :check-ins="latestCheckIns" />
         </div>
-        <div>
+        <div :class="{'lg:col-span-3': user?.role !== 'admin'}">
           <QuickActions />
         </div>
       </div>
-      
-      <AiAssistantWidget />
+      <AiAssistantWidget v-if="user?.role === 'admin'" />
     </div>
   </div>
 </template>

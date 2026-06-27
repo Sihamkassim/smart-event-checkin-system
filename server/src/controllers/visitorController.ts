@@ -29,6 +29,66 @@ export const getVisitors = async (req: AuthRequest, res: Response) => {
   }
 };
 
+export const exportVisitors = async (req: AuthRequest, res: Response) => {
+  try {
+    const { eventId } = req.params;
+    
+    if (!eventId) {
+      return res.status(400).json({
+        success: false,
+        message: 'Event ID is required',
+      });
+    }
+
+    const result = await VisitorService.getVisitorsByEvent(parseInt(eventId));
+
+    if (!result.success) {
+      return res.status(400).json(result);
+    }
+
+    const visitors = result.visitors || [];
+    
+    // Create CSV header
+    const headers = ['Full Name', 'Phone', 'Email', 'Company', 'Check-in Token', 'Checked In', 'Created At'];
+    
+    // Create CSV rows
+    const rows = visitors.map((v: any) => {
+      // Escape commas and quotes for CSV
+      const escapeCsv = (str: any) => {
+        if (!str) return '';
+        const stringified = String(str);
+        if (stringified.includes(',') || stringified.includes('"') || stringified.includes('\\n')) {
+          return `"${stringified.replace(/"/g, '""')}"`;
+        }
+        return stringified;
+      };
+
+      return [
+        escapeCsv(v.full_name),
+        escapeCsv(v.phone),
+        escapeCsv(v.email),
+        escapeCsv(v.company),
+        escapeCsv(v.check_in_token),
+        escapeCsv(v.checked_in ? 'Yes' : 'No'),
+        escapeCsv(v.created_at ? new Date(v.created_at).toLocaleString() : '')
+      ].join(',');
+    });
+    
+    const csvContent = [headers.join(','), ...rows].join('\n');
+    
+    res.setHeader('Content-Type', 'text/csv');
+    res.setHeader('Content-Disposition', `attachment; filename="visitors_event_${eventId}.csv"`);
+    
+    res.status(200).send(csvContent);
+  } catch (error) {
+    console.error('Export visitors error:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Server error',
+    });
+  }
+};
+
 export const searchVisitors = async (req: AuthRequest, res: Response) => {
   try {
     const { eventId } = req.params;

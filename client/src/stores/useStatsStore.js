@@ -24,11 +24,17 @@ export const useStatsStore = defineStore('stats', () => {
     }
   };
 
-  const askAiAssistant = async (question) => {
+  const askAiAssistant = async (question, eventId = null) => {
     isAiLoading.value = true;
     aiAnswer.value = null;
     try {
-      const response = await statsAPI.askAi(question);
+      let response;
+      if (eventId) {
+        response = await statsAPI.askEventAi(eventId, question);
+      } else {
+        response = await statsAPI.askAi(question);
+      }
+      
       if (response.success) {
         aiAnswer.value = response.answer;
         return response;

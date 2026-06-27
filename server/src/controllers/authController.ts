@@ -80,3 +80,34 @@ export const getMe = async (req: AuthRequest, res: Response) => {
     });
   }
 };
+
+export const setupPassword = async (req: Request, res: Response) => {
+  try {
+    const { token, password } = req.body;
+
+    if (!token || !password) {
+      return res.status(400).json({ success: false, message: 'Token and password are required' });
+    }
+
+    const user = await User.findOne({ where: { activation_token: token, status: 'pending' } });
+
+    if (!user) {
+      return res.status(400).json({ success: false, message: 'Invalid or expired activation link' });
+    }
+
+    // Hash the new password
+    const passwordHash = await bcrypt.hash(password, 10);
+
+    // Update user
+    await user.update({
+      password_hash: passwordHash,
+      status: 'active',
+      activation_token: null,
+    });
+
+    res.json({ success: true, message: 'Password set successfully! You can now log in.' });
+  } catch (error) {
+    console.error('Setup password error:', error);
+    res.status(500).json({ success: false, message: 'Server error' });
+  }
+};
