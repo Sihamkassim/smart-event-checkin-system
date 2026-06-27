@@ -15,22 +15,170 @@ const router = Router();
 // All routes require authentication
 router.use(authenticate);
 
-// GET /api/events - Get all events
+/**
+ * @swagger
+ * /api/events:
+ *   get:
+ *     summary: Get all events
+ *     description: Retrieve a list of all active, completed, or draft events
+ *     tags: [Events]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: A list of events
+ *       500:
+ *         description: Server error
+ */
 router.get('/', getEvents);
 
-// GET /api/events/:id - Get event by ID
+/**
+ * @swagger
+ * /api/events/{id}:
+ *   get:
+ *     summary: Get event by ID
+ *     description: Retrieve detailed information for a specific event
+ *     tags: [Events]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *     responses:
+ *       200:
+ *         description: Event details
+ *       404:
+ *         description: Event not found
+ */
 router.get('/:id', getEventById);
 
-// POST /api/events - Create a new event (admin only)
+/**
+ * @swagger
+ * /api/events:
+ *   post:
+ *     summary: Create a new event
+ *     description: Create a new event (admin only). Supports multipart/form-data for image uploads.
+ *     tags: [Events]
+ *     security:
+ *       - bearerAuth: []
+ *     requestBody:
+ *       content:
+ *         multipart/form-data:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               name:
+ *                 type: string
+ *               date:
+ *                 type: string
+ *               location:
+ *                 type: string
+ *               status:
+ *                 type: string
+ *               image:
+ *                 type: string
+ *                 format: binary
+ *     responses:
+ *       201:
+ *         description: Event created
+ *       400:
+ *         description: Invalid input
+ *       403:
+ *         description: Unauthorized
+ */
 router.post('/', authorize('admin'), upload.single('image'), createEvent);
 
-// PUT /api/events/:id - Update an event (admin only)
+/**
+ * @swagger
+ * /api/events/{id}:
+ *   put:
+ *     summary: Update an event
+ *     description: Modify details of an existing event (admin only). Supports multipart/form-data for image uploads.
+ *     tags: [Events]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *     requestBody:
+ *       content:
+ *         multipart/form-data:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               name:
+ *                 type: string
+ *               date:
+ *                 type: string
+ *               location:
+ *                 type: string
+ *               status:
+ *                 type: string
+ *               image:
+ *                 type: string
+ *                 format: binary
+ *     responses:
+ *       200:
+ *         description: Event updated
+ *       403:
+ *         description: Unauthorized
+ *       404:
+ *         description: Event not found
+ */
 router.put('/:id', authorize('admin'), upload.single('image'), updateEvent);
 
-// DELETE /api/events/:id - Delete an event (admin only)
+/**
+ * @swagger
+ * /api/events/{id}:
+ *   delete:
+ *     summary: Delete an event
+ *     description: Permanently remove an event from the system (admin only)
+ *     tags: [Events]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *     responses:
+ *       200:
+ *         description: Event deleted
+ *       403:
+ *         description: Unauthorized
+ *       404:
+ *         description: Event not found
+ */
 router.delete('/:id', authorize('admin'), deleteEvent);
 
-// GET /api/events/:id/stats - Get event statistics
+/**
+ * @swagger
+ * /api/events/{id}/stats:
+ *   get:
+ *     summary: Get event statistics
+ *     description: Retrieve dynamic statistics (check-ins vs total visitors, etc.) for a specific event
+ *     tags: [Events]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *     responses:
+ *       200:
+ *         description: Event statistics
+ *       404:
+ *         description: Event not found
+ */
 router.get('/:id/stats', getEventStats);
 
 export default router;
