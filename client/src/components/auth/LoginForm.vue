@@ -59,6 +59,27 @@
         Sign In
       </a-button>
     </a-form-item>
+
+    <!-- Demo Credentials (Review Only) -->
+    <div class="mt-4 pt-4 border-t border-slate-200">
+      <p class="text-xs text-slate-500 mb-2 text-center">Demo Credentials (Review Only)</p>
+      <div class="flex gap-2">
+        <a-button
+          size="small"
+          @click="fillDemoCreds('admin')"
+          class="flex-1 text-xs"
+        >
+          Admin
+        </a-button>
+        <a-button
+          size="small"
+          @click="fillDemoCreds('staff')"
+          class="flex-1 text-xs"
+        >
+          Staff
+        </a-button>
+      </div>
+    </div>
   </a-form>
 </template>
 
@@ -89,5 +110,15 @@ const onFinish = async (values) => {
 
 const onFinishFailed = (errorInfo) => {
   console.log('Failed:', errorInfo);
+};
+
+const fillDemoCreds = (type) => {
+  if (type === 'admin') {
+    formState.email = 'admin@lahn.test';
+    formState.password = 'password123';
+  } else if (type === 'staff') {
+    formState.email = 'staff@lahn.test';
+    formState.password = 'password123';
+  }
 };
 </script>

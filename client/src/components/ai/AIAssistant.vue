@@ -17,24 +17,38 @@
           </div>
         </div>
       </div>
-      <div class="flex gap-2 shrink-0">
-        <a-input
-          v-model:value="inputMessage"
-          placeholder="Ask me anything about events, visitors, or check-ins..."
-          @pressEnter="handleSend"
-          :disabled="isLoading"
-        >
-          <template #suffix>
-            <a-button
-              type="primary"
-              size="small"
-              @click="handleSend"
-              :loading="isLoading"
-            >
-              Send
-            </a-button>
-          </template>
-        </a-input>
+      <div class="flex flex-col gap-2 shrink-0">
+        <div class="flex flex-wrap gap-2">
+          <a-button
+            v-for="quickQuestion in quickQuestions"
+            :key="quickQuestion"
+            size="small"
+            @click="handleQuickQuestion(quickQuestion)"
+            :disabled="isLoading"
+            class="text-xs"
+          >
+            {{ quickQuestion }}
+          </a-button>
+        </div>
+        <div class="flex gap-2">
+          <a-input
+            v-model:value="inputMessage"
+            placeholder="Ask me anything about events, visitors, or check-ins..."
+            @pressEnter="handleSend"
+            :disabled="isLoading"
+          >
+            <template #suffix>
+              <a-button
+                type="primary"
+                size="small"
+                @click="handleSend"
+                :loading="isLoading"
+              >
+                Send
+              </a-button>
+            </template>
+          </a-input>
+        </div>
       </div>
     </div>
   </a-card>
@@ -54,6 +68,11 @@ const messages = ref([
 const isLoading = ref(false);
 const messagesContainer = ref(null);
 
+const quickQuestions = ref([
+  'How many visitors checked in?',
+  'What\'s the check-in percentage?'
+]);
+
 const { success, error } = useToast();
 
 const scrollToBottom = async () => {
@@ -61,6 +80,11 @@ const scrollToBottom = async () => {
   if (messagesContainer.value) {
     messagesContainer.value.scrollTop = messagesContainer.value.scrollHeight;
   }
+};
+
+const handleQuickQuestion = (question) => {
+  inputMessage.value = question;
+  handleSend();
 };
 
 const handleSend = async () => {
@@ -120,4 +144,4 @@ const generateAIResponse = (question) => {
 };
 </script>
 
-</script>
+

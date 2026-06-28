@@ -46,15 +46,27 @@
 
       <!-- Input Area -->
       <div class="p-3 bg-white border-t border-slate-100">
+        <!-- Quick Questions -->
+        <div class="grid grid-cols-2 gap-2 mb-3">
+          <button
+            v-for="quickQuestion in quickQuestions"
+            :key="quickQuestion"
+            @click="handleQuickQuestion(quickQuestion)"
+            :disabled="isAiLoading"
+            class="text-xs px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-full transition-colors disabled:opacity-50"
+          >
+            {{ quickQuestion }}
+          </button>
+        </div>
         <form @submit.prevent="sendMessage" class="flex gap-2">
-          <input 
+          <input
             v-model="inputQuery"
-            type="text" 
+            type="text"
             placeholder="Ask about attendance..."
             class="flex-1 px-4 py-2 bg-slate-100 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-500/50 text-sm"
             :disabled="isAiLoading"
           />
-          <button 
+          <button
             type="submit"
             :disabled="!inputQuery.trim() || isAiLoading"
             class="w-10 h-10 bg-brand-500 rounded-xl text-white flex items-center justify-center hover:bg-brand-600 disabled:opacity-50 transition-colors"
@@ -91,12 +103,33 @@ const messages = ref([
   { role: 'ai', content: props.eventId ? 'Hello! I am your Event AI assistant. You can ask me questions about this specific event\'s statistics.' : 'Hello! I am your AI assistant. You can ask me questions about historical system stats and event attendance.' }
 ]);
 
+const quickQuestions = computed(() => {
+  if (props.eventId) {
+    return [
+      'What\'s the total attendance for this event?',
+      'Show me recent check-ins for this event',
+      'Tell me about this event?',
+    ];
+  } else {
+    return [
+      'What\'s the total attendance?',
+      'Show me recent check-ins',
+      'How many events are active?',
+    ];
+  }
+});
+
 const renderMarkdown = (text) => {
   return marked(text || '');
 };
 
 const toggleChat = () => {
   isOpen.value = !isOpen.value;
+};
+
+const handleQuickQuestion = (question) => {
+  inputQuery.value = question;
+  sendMessage();
 };
 
 const sendMessage = async () => {
