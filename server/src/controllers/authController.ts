@@ -49,6 +49,7 @@ export const login = async (req: Request, res: Response) => {
       name: user.name,
       email: user.email,
       role: user.role,
+      permissions: user.permissions || [],
       created_at: user.created_at,
     };
 
@@ -69,9 +70,18 @@ export const login = async (req: Request, res: Response) => {
 export const getMe = async (req: AuthRequest, res: Response) => {
   try {
     const user = req.user;
+    // Fetch fresh user data from database to get latest permissions
+    const freshUser = await User.findByPk(user.id, {
+      attributes: { exclude: ['password_hash'] }
+    });
+    
+    if (!freshUser) {
+      return res.status(404).json({ success: false, message: 'User not found' });
+    }
+    
     res.json({
       success: true,
-      user,
+      user: freshUser,
     });
   } catch (error) {
     res.status(500).json({
