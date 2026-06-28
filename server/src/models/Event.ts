@@ -6,6 +6,7 @@ interface EventAttributes {
   name: string;
   date: Date;
   location: string;
+  image_url?: string | null;
   status: 'draft' | 'active' | 'completed';
   created_at: Date;
   updated_at: Date;
@@ -41,6 +42,10 @@ Event.init(
     location: {
       type: DataTypes.STRING(200),
       allowNull: false,
+    },
+    image_url: {
+      type: DataTypes.STRING(500),
+      allowNull: true,
     },
     status: {
       type: DataTypes.ENUM('draft', 'active', 'completed'),

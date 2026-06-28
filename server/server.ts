@@ -1,42 +1,45 @@
-import express from "express";
-// import cors from "cors";
-import dotenv from "dotenv";
-import sequelize from "./src/config/database.ts";
+import app from './src/app';
 
-
-dotenv.config();
-
-const app = express();
-
-// app.use(cors());
-// app.use(express.json());
-
-app.get("/", (req, res) => {
-  res.json({ message: "API running 🚀 (TS)" });
-});
-
-// DB test
-app.get("/db-test", async (req, res) => {
-  try {
-    await sequelize.authenticate();
-    res.json({ database: "connected ✅" });
-  } catch (error: any) {
-    res.status(500).json({
-      database: "failed ❌",
-      error: error.message
-    });
-  }
-});
+import  sequelize  from './src/config/database';
+import { startStatsCron } from "./src/cron/statsCron";
+import { startEventCron } from "./src/cron/eventCron";
 
 const PORT = process.env.PORT || 5000;
 
-app.listen(PORT, async () => {
-  console.log(`Server running on ${PORT}`);
-
+const startServer = async () => {
   try {
+    // Test database connection
     await sequelize.authenticate();
-    console.log("MySQL connected 🔥");
-  } catch (err: any) {
-    console.log("DB Error:", err.message);
+    console.log('✅ Database connection established successfully.');
+
+    // Sync database (use { alter: true } for development)
+    await sequelize.sync();
+    console.log('✅ Database synchronized');
+
+    // Routes
+
+    // Start cron jobs
+    startStatsCron();
+    startEventCron();
+
+    // Start server
+    app.listen(PORT, () => {
+      console.log(`🚀 Server running on http://localhost:${PORT}`);
+      console.log(`📁 Environment: ${process.env.NODE_ENV || 'development'}`);
+      console.log(`🔐 JWT Secret: ${process.env.JWT_SECRET ? '✅ Set' : '❌ Not set'}`);
+    });
+  } catch (error) {
+    console.error('❌ Unable to start server:', error);
+    process.exit(1);
   }
+};
+
+// Handle unhandled promise rejections
+process.on('unhandledRejection', (error) => {
+  console.error('Unhandled Rejection:', error);
+  process.exit(1);
 });
+
+startServer();
+
+export default app;
