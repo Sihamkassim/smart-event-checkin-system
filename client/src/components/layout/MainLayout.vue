@@ -36,7 +36,7 @@
               <template #icon><CalendarOutlined class="text-lg" /></template>
               <span class="font-medium">Events</span>
             </a-menu-item>
-            <a-menu-item key="/checkin" class="!rounded-xl mb-2 !flex !items-center h-12">
+            <a-menu-item v-if="canCheckin" key="/checkin" class="!rounded-xl mb-2 !flex !items-center h-12">
               <template #icon><ScanOutlined class="text-lg" /></template>
               <span class="font-medium">Check-in</span>
             </a-menu-item>
@@ -109,7 +109,7 @@
               <template #icon><CalendarOutlined class="text-lg" /></template>
               <span class="font-medium">Events</span>
             </a-menu-item>
-            <a-menu-item key="/checkin" class="!rounded-xl mb-2 !flex !items-center h-12">
+            <a-menu-item v-if="canCheckin" key="/checkin" class="!rounded-xl mb-2 !flex !items-center h-12">
               <template #icon><ScanOutlined class="text-lg" /></template>
               <span class="font-medium">Check-in</span>
             </a-menu-item>
@@ -183,6 +183,7 @@
 import { ref, computed, watch, onMounted, onUnmounted } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
 import { useAuthStore } from '../../stores/useAuthStore';
+import { useAuth } from '../../composables/useAuth';
 import {
   DashboardOutlined,
   CalendarOutlined,
@@ -199,6 +200,7 @@ import {
 const router = useRouter();
 const route = useRoute();
 const authStore = useAuthStore();
+const { canCheckin } = useAuth();
 
 const collapsed = ref(false);
 const mobileDrawerOpen = ref(false);

@@ -43,7 +43,6 @@
       :events="filteredEvents" 
       :loading="isLoading" 
       @view="handleView"
-      @edit="handleEdit"
       @delete="handleDelete"
     />
 

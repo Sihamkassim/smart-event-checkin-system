@@ -24,11 +24,11 @@
         <div class="lg:col-span-2" v-if="user?.role === 'admin'">
           <LatestCheckIns :check-ins="latestCheckIns" />
         </div>
-        <div :class="{'lg:col-span-3': user?.role !== 'admin'}">
+        <div v-if="user?.role === 'admin'" :class="{'lg:col-span-1': user?.role === 'admin'}">
           <QuickActions />
         </div>
       </div>
-      <AiAssistantWidget v-if="user?.role === 'admin'" />
+      <AiAssistantWidget v-if="canUseAI" />
     </div>
   </div>
 </template>
@@ -44,7 +44,7 @@ import AiAssistantWidget from '../../components/dashboard/AiAssistantWidget.vue'
 import LoadingSpinner from '../../components/common/LoadingSpinner.vue';
 import { CalendarOutlined } from '@ant-design/icons-vue';
 
-const { user } = useAuth();
+const { user, canUseAI } = useAuth();
 const statsStore = useStatsStore();
 
 const isLoading = computed(() => statsStore.isLoading);

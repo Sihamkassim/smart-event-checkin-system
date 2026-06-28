@@ -10,8 +10,8 @@
     >
       <div v-if="!event.image_url" class="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyMCIgaGVpZ2h0PSIyMCI+CgkJPGNpcmNsZSBjeD0iMiIgY3k9IjIiIHI9IjIiIGZpbGw9IiNmZmZmZmYiIGZpbGwtb3BhY2l0eT0iMC4xIi8+Cjwvc3ZnPg==')] opacity-30"></div>
       
-      <!-- Status Badge -->
-      <div class="absolute top-4 right-4">
+      <!-- Status Badge & Delete Button -->
+      <div class="absolute top-4 right-4 flex gap-2">
         <div 
           class="px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider backdrop-blur-md shadow-sm"
           :class="{
@@ -22,6 +22,23 @@
         >
           {{ event.status }}
         </div>
+        <a-popconfirm
+          title="Are you sure you want to delete this event?"
+          ok-text="Yes"
+          cancel-text="No"
+          @confirm="$emit('delete', event.id)"
+          @click.stop
+        >
+          <a-button 
+            size="small" 
+            danger
+            type="text"
+            class="!bg-white/90 hover:!bg-white backdrop-blur-md !border-0 shadow-sm"
+            @click.stop
+          >
+            <template #icon><DeleteOutlined /></template>
+          </a-button>
+        </a-popconfirm>
       </div>
     </div>
 
@@ -37,11 +54,9 @@
       
       <div class="space-y-2 mt-auto pt-4 border-t border-slate-100">
         <div class="flex items-center text-sm text-slate-600">
-          <CalendarOutlined class="text-brand-500 mr-2" />
           <span class="font-medium">{{ formatDate(event.start_date) }}</span>
         </div>
         <div class="flex items-center text-sm text-slate-600" v-if="event.location">
-          <EnvironmentOutlined class="text-brand-500 mr-2" />
           <span class="truncate">{{ event.location }}</span>
         </div>
       </div>
@@ -50,7 +65,7 @@
 </template>
 
 <script setup>
-import { CalendarOutlined, EnvironmentOutlined } from '@ant-design/icons-vue';
+import { DeleteOutlined } from '@ant-design/icons-vue';
 import dayjs from 'dayjs';
 
 const props = defineProps({
@@ -60,7 +75,7 @@ const props = defineProps({
   },
 });
 
-defineEmits(['click', 'edit', 'delete']);
+defineEmits(['click', 'delete']);
 
 const formatDate = (dateString) => {
   if (!dateString) return '';

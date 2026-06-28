@@ -27,7 +27,6 @@
         :key="event.id" 
         :event="event" 
         @click="$emit('view', event)"
-        @edit="$emit('edit', event)"
         @delete="$emit('delete', event.id)"
       />
     </div>
@@ -49,5 +48,5 @@ defineProps({
   },
 });
 
-defineEmits(['view', 'edit', 'delete', 'create']);
+defineEmits(['view', 'delete', 'create']);
 </script>
