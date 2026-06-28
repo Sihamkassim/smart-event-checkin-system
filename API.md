@@ -5,7 +5,8 @@ Complete API reference for the Smart Event Check-in System.
 ## Base URL
 
 - **Development**: `http://localhost:5000/api`
-- **Production**: `https://your-backend-url.onrender.com/api`
+- **Production**: `https://smart-event-checkin-sever.onrender.com`
+   **swagger**: ` https://smart-event-checkin-sever.onrender.com/api-docs/`
 
 ## Authentication
 
