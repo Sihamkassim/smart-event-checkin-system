@@ -18,7 +18,12 @@ const app: Application = express();
 
 // Middleware
 app.use(cors({
-  origin: process.env.FRONTEND_URL || 'http://localhost:5173',
+  origin: [
+    'https://smart-event-checkin-system-no4m.vercel.app',
+    'https://smart-event-checkin-system-no4m-git-main-sihamkassims-projects.vercel.app',
+    'https://smart-event-checkin-system-no4m-qqhdeobsy-sihamkassims-projects.vercel.app',
+    'http://localhost:5173'
+  ],
   credentials: true,
 }));
 app.use(express.json());
