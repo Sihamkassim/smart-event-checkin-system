@@ -2,3 +2,4 @@
 .env
 
 hash-password.ts
+./SYSTEM_DOCUMENTATION.md
