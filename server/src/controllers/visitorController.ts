@@ -171,7 +171,7 @@ export const createVisitor = async (req: AuthRequest, res: Response) => {
 export const bulkCreateVisitors = async (req: AuthRequest, res: Response) => {
   try {
     const { eventId } = req.params;
-    const { visitors } = req.body;
+    const { visitors, sendEmails } = req.body;
 
     if (!eventId) {
       return res.status(400).json({
@@ -187,7 +187,7 @@ export const bulkCreateVisitors = async (req: AuthRequest, res: Response) => {
       });
     }
 
-    const result = await VisitorService.bulkCreateVisitors(parseInt(eventId), visitors);
+    const result = await VisitorService.bulkCreateVisitors(parseInt(eventId), visitors, sendEmails);
 
     if (!result.success) {
       return res.status(400).json(result);

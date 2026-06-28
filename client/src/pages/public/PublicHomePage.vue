@@ -1,8 +1,8 @@
 <template>
-  <div class="public-home-page">
-    <div class="hero">
-      <h1>Welcome to {{ appName }}</h1>
-      <p>Smart Event Check-in System</p>
+  <div class="p-6 max-w-[1200px] mx-auto">
+    <div class="text-center mb-12">
+      <h1 class="text-5xl font-bold mb-4 text-blue-500">Welcome to {{ appName }}</h1>
+      <p class="text-xl text-slate-500 m-0">Smart Event Check-in System</p>
     </div>
     <PublicEventList @register="handleRegister" />
   </div>
@@ -20,29 +20,3 @@ const handleRegister = (eventId) => {
   router.push(`/public/register/${eventId}`);
 };
 </script>
-
-<style scoped>
-.public-home-page {
-  padding: 24px;
-  max-width: 1200px;
-  margin: 0 auto;
-}
-
-.hero {
-  text-align: center;
-  margin-bottom: 48px;
-}
-
-.hero h1 {
-  font-size: 48px;
-  font-weight: bold;
-  margin: 0 0 16px 0;
-  color: #1890ff;
-}
-
-.hero p {
-  font-size: 20px;
-  color: #666;
-  margin: 0;
-}
-</style>

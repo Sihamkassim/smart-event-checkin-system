@@ -52,7 +52,7 @@
       
       <!-- Main Content Tabs -->
       <div class="glass-card rounded-2xl overflow-hidden mt-6">
-        <a-tabs v-model:activeKey="activeTab" class="custom-tabs px-6 pt-4">
+        <a-tabs v-model:activeKey="activeTab" class="px-6 pt-4 [&_.ant-tabs-nav]:!mb-0 [&_.ant-tabs-nav::before]:border-b [&_.ant-tabs-nav::before]:border-slate-100">
           
           <!-- Visitors Tab -->
           <a-tab-pane key="visitors">
@@ -262,12 +262,3 @@ onMounted(async () => {
   ]);
 });
 </script>
-
-<style>
-.custom-tabs .ant-tabs-nav {
-  margin-bottom: 0 !important;
-}
-.custom-tabs .ant-tabs-nav::before {
-  border-bottom: 1px solid #f1f5f9;
-}
-</style>

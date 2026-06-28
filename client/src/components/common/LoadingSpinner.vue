@@ -1,5 +1,5 @@
 <template>
-  <div class="loading-spinner">
+  <div class="flex items-center justify-center min-h-[200px]">
     <a-spin :size="size" :tip="tip" />
   </div>
 </template>
@@ -17,12 +17,3 @@ defineProps({
   },
 });
 </script>
-
-<style scoped>
-.loading-spinner {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  min-height: 200px;
-}
-</style>

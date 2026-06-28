@@ -41,10 +41,10 @@
     />
 
     <a-card v-if="result?.success && result.visitor" title="Your QR Code" style="margin-top: 16px">
-      <div class="qr-code">
+      <div class="flex justify-center my-4">
         <QRCodeVue :value="result.visitor.check_in_token" :size="200" />
       </div>
-      <p class="token-text">Your check-in token: <strong>{{ result.visitor.check_in_token }}</strong></p>
+      <p class="text-center mt-4 text-slate-500">Your check-in token: <strong>{{ result.visitor.check_in_token }}</strong></p>
     </a-card>
   </a-card>
 </template>
@@ -104,17 +104,3 @@ const handleSubmit = async () => {
   }
 };
 </script>
-
-<style scoped>
-.qr-code {
-  display: flex;
-  justify-content: center;
-  margin: 16px 0;
-}
-
-.token-text {
-  text-align: center;
-  margin-top: 16px;
-  color: #666;
-}
-</style>

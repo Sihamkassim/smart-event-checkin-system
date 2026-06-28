@@ -16,7 +16,7 @@
         v-model:value="formState.email" 
         placeholder="Email address"
         size="large"
-        class="custom-input h-12"
+        class="h-12 [&_.ant-input]:rounded-lg [&_.ant-input]:bg-slate-50 focus-within:bg-white [&_.ant-input-password]:rounded-lg [&_.ant-input-password]:bg-slate-50"
       >
         <template #prefix>
           <UserOutlined class="text-slate-400 mr-1" />
@@ -33,7 +33,7 @@
         v-model:value="formState.password" 
         placeholder="Password"
         size="large"
-        class="custom-input h-12"
+        class="h-12 [&_.ant-input]:rounded-lg [&_.ant-input]:bg-slate-50 focus-within:bg-white [&_.ant-input-password]:rounded-lg [&_.ant-input-password]:bg-slate-50"
       >
         <template #prefix>
           <LockOutlined class="text-slate-400 mr-1" />
@@ -91,14 +91,3 @@ const onFinishFailed = (errorInfo) => {
   console.log('Failed:', errorInfo);
 };
 </script>
-
-<style>
-.custom-input .ant-input, 
-.custom-input .ant-input-password {
-  border-radius: 8px;
-  background-color: #f8fafc;
-}
-.custom-input:focus-within {
-  background-color: #ffffff;
-}
-</style>

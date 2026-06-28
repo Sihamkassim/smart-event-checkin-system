@@ -1,23 +1,23 @@
 <template>
-  <a-card title="AI Assistant" class="ai-assistant">
-    <div class="chat-container">
-      <div class="messages" ref="messagesContainer">
+  <a-card title="AI Assistant" class="h-[500px] flex flex-col [&_.ant-card-body]:flex-1 [&_.ant-card-body]:flex [&_.ant-card-body]:flex-col [&_.ant-card-body]:overflow-hidden">
+    <div class="flex flex-col h-full overflow-hidden">
+      <div class="flex-1 overflow-y-auto p-4 bg-slate-100 rounded-lg mb-4 space-y-3" ref="messagesContainer">
         <div
           v-for="(message, index) in messages"
           :key="index"
-          :class="['message', message.role]"
+          :class="['flex', message.role === 'user' ? 'justify-end' : 'justify-start']"
         >
-          <div class="message-content">
+          <div :class="['max-w-[70%] px-3 py-2 rounded-xl break-words', message.role === 'user' ? 'bg-blue-500 text-white' : 'bg-white text-slate-800 border border-slate-200']">
             {{ message.content }}
           </div>
         </div>
-        <div v-if="isLoading" class="message assistant">
-          <div class="message-content">
+        <div v-if="isLoading" class="flex justify-start">
+          <div class="max-w-[70%] px-3 py-2 rounded-xl break-words bg-white text-slate-800 border border-slate-200">
             <a-spin size="small" /> Thinking...
           </div>
         </div>
       </div>
-      <div class="input-area">
+      <div class="flex gap-2 shrink-0">
         <a-input
           v-model:value="inputMessage"
           placeholder="Ask me anything about events, visitors, or check-ins..."
@@ -120,61 +120,4 @@ const generateAIResponse = (question) => {
 };
 </script>
 
-<style scoped>
-.ai-assistant {
-  height: 500px;
-  display: flex;
-  flex-direction: column;
-}
-
-.chat-container {
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-}
-
-.messages {
-  flex: 1;
-  overflow-y: auto;
-  padding: 16px;
-  background: #f5f5f5;
-  border-radius: 4px;
-  margin-bottom: 16px;
-}
-
-.message {
-  margin-bottom: 12px;
-  display: flex;
-}
-
-.message.user {
-  justify-content: flex-end;
-}
-
-.message.assistant {
-  justify-content: flex-start;
-}
-
-.message-content {
-  max-width: 70%;
-  padding: 8px 12px;
-  border-radius: 8px;
-  word-wrap: break-word;
-}
-
-.message.user .message-content {
-  background: #1890ff;
-  color: white;
-}
-
-.message.assistant .message-content {
-  background: white;
-  color: #333;
-  border: 1px solid #d9d9d9;
-}
-
-.input-area {
-  display: flex;
-  gap: 8px;
-}
-</style>
+</script>

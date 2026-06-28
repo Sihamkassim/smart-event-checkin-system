@@ -27,7 +27,7 @@
       <div class="flex-1 overflow-y-auto p-4 space-y-4 bg-slate-50" ref="chatContainer">
         <div v-for="(msg, index) in messages" :key="index" class="flex" :class="msg.role === 'user' ? 'justify-end' : 'justify-start'">
           <div 
-            class="max-w-[85%] rounded-2xl p-3 text-sm markdown-body"
+            class="max-w-[85%] rounded-2xl p-3 text-sm [&_p]:mb-2 [&_p:last-child]:mb-0 [&_ul]:list-disc [&_ul]:pl-6 [&_ul]:mb-2 [&_ol]:list-decimal [&_ol]:pl-6 [&_ol]:mb-2 [&_li]:mb-1"
             :class="msg.role === 'user' ? 'bg-brand-500 text-white rounded-br-none' : 'bg-white text-slate-700 border border-slate-200 rounded-bl-none'"
             v-html="msg.role === 'user' ? msg.content : renderMarkdown(msg.content)"
           >
@@ -127,25 +127,3 @@ const scrollToBottom = async () => {
   }
 };
 </script>
-
-<style>
-.markdown-body p {
-  margin-bottom: 0.5em;
-}
-.markdown-body p:last-child {
-  margin-bottom: 0;
-}
-.markdown-body ul {
-  list-style-type: disc;
-  padding-left: 1.5em;
-  margin-bottom: 0.5em;
-}
-.markdown-body ol {
-  list-style-type: decimal;
-  padding-left: 1.5em;
-  margin-bottom: 0.5em;
-}
-.markdown-body li {
-  margin-bottom: 0.25em;
-}
-</style>

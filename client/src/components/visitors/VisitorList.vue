@@ -8,7 +8,7 @@
         enter-button
         @search="handleSearch"
         size="large"
-        class="w-full sm:max-w-md custom-search"
+        class="w-full sm:max-w-md [&_.ant-input-wrapper]:rounded-lg [&_.ant-input-wrapper]:overflow-hidden"
       />
     </div>
 
@@ -19,7 +19,7 @@
       :loading="isLoading"
       :row-key="record => record.id"
       :pagination="{ pageSize: 10, showSizeChanger: true }"
-      class="custom-table"
+      class="[&_.ant-table]:!bg-transparent [&_.ant-table-thead>tr>th]:!bg-slate-50 [&_.ant-table-thead>tr>th]:!text-slate-500 [&_.ant-table-thead>tr>th]:!font-semibold [&_.ant-table-thead>tr>th]:!border-b [&_.ant-table-thead>tr>th]:!border-slate-200 [&_.ant-table-tbody>tr>td]:!border-b [&_.ant-table-tbody>tr>td]:!border-slate-100 [&_.ant-table-tbody>tr:hover>td]:!bg-slate-50"
       :scroll="{ x: 800 }"
     >
       <!-- Custom renderers -->
@@ -164,21 +164,3 @@ onMounted(() => {
   visitorStore.fetchVisitorsByEvent(props.eventId);
 });
 </script>
-
-<style>
-.custom-table .ant-table {
-  background: transparent;
-}
-.custom-table .ant-table-thead > tr > th {
-  background: #f8fafc;
-  color: #64748b;
-  font-weight: 600;
-  border-bottom: 1px solid #e2e8f0;
-}
-.custom-table .ant-table-tbody > tr > td {
-  border-bottom: 1px solid #f1f5f9;
-}
-.custom-table .ant-table-tbody > tr:hover > td {
-  background: #f8fafc;
-}
-</style>

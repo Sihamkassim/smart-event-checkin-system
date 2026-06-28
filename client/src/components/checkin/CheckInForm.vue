@@ -9,7 +9,7 @@
         v-model:value="selectedEventId"
         show-search
         placeholder="Search and select an active event"
-        class="w-full custom-select"
+        class="w-full [&_.ant-select-selector]:!rounded-lg [&_.ant-select-selector]:!h-10 [&_.ant-select-selector]:items-center"
         size="large"
         :options="eventOptions"
         :filter-option="filterOption"
@@ -48,7 +48,7 @@
               v-model:value="token"
               placeholder="Enter check-in token (e.g. TKN-...)"
               size="large"
-              class="text-center font-mono text-lg tracking-wider custom-token-input"
+              class="text-center font-mono text-lg tracking-wider rounded-xl [&_input]:text-center [&_input]:font-mono [&_input]:font-semibold [&_input]:tracking-widest"
               @pressEnter="handleCheckIn"
               :disabled="isLoading"
             >
@@ -150,20 +150,3 @@ onMounted(async () => {
   }
 });
 </script>
-
-<style>
-.custom-select .ant-select-selector {
-  border-radius: 8px !important;
-  height: 40px !important;
-  align-items: center;
-}
-.custom-token-input {
-  border-radius: 12px;
-}
-.custom-token-input input {
-  text-align: center;
-  font-family: monospace;
-  font-weight: 600;
-  letter-spacing: 2px;
-}
-</style>

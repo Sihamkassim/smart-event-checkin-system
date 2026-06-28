@@ -1,10 +1,11 @@
 <template>
-  <a-layout class="min-h-screen bg-slate-50">
+  <a-layout class="min-h-screen bg-slate-50" has-sider>
     <a-layout-sider
       v-model:collapsed="collapsed"
       :trigger="null"
       collapsible
-      class="!bg-white border-r border-slate-200 z-20 h-screen sticky top-0"
+      class="!bg-white border-r border-slate-200 z-50 shadow-sm"
+      :style="{ overflow: 'hidden', height: '100vh', position: 'fixed', left: 0, top: 0, bottom: 0 }"
       width="260"
     >
       <div class="flex flex-col h-full">
@@ -25,7 +26,7 @@
             theme="light"
             mode="inline"
             @click="handleMenuClick"
-            class="!bg-transparent border-r-0 custom-menu"
+            class="custom-menu !bg-transparent border-r-0"
           >
             <a-menu-item key="/" class="!rounded-xl mb-2 !flex !items-center h-12">
               <template #icon><DashboardOutlined class="text-lg" /></template>
@@ -75,7 +76,7 @@
       </div>
     </a-layout-sider>
 
-    <a-layout class="bg-transparent flex-1 w-full min-w-0">
+    <a-layout class="bg-transparent flex-1 w-full min-w-0 transition-all duration-200 ease-in-out" :style="{ marginLeft: collapsed ? '80px' : '260px' }">
       <a-layout-header class="!bg-white/80 backdrop-blur-lg border-b border-slate-200/50 px-6 flex items-center justify-between sticky top-0 z-10 !h-20 shadow-sm">
         <div class="flex items-center">
           <button @click="collapsed = !collapsed" class="w-10 h-10 rounded-xl bg-slate-100 hover:bg-brand-50 text-slate-600 hover:text-brand-600 flex items-center justify-center transition-colors">
@@ -87,7 +88,15 @@
 
       <a-layout-content class="p-6 md:p-8 max-w-7xl mx-auto w-full">
         <router-view v-slot="{ Component }">
-          <transition name="fade" mode="out-in">
+          <transition 
+            enter-active-class="transition-all duration-200 ease-out"
+            enter-from-class="opacity-0 translate-y-2"
+            enter-to-class="opacity-100 translate-y-0"
+            leave-active-class="transition-all duration-200 ease-in"
+            leave-from-class="opacity-100 translate-y-0"
+            leave-to-class="opacity-0 translate-y-2"
+            mode="out-in"
+          >
             <component :is="Component" />
           </transition>
         </router-view>
@@ -117,13 +126,19 @@ const route = useRoute();
 const authStore = useAuthStore();
 
 const collapsed = ref(false);
-const selectedKeys = ref([route.path]);
-const appName = import.meta.env.VITE_APP_NAME || 'Lahn Event';
+const getActiveKey = (path) => {
+  if (path.startsWith('/events')) return '/events';
+  if (path.startsWith('/checkin')) return '/checkin';
+  if (path.startsWith('/staff')) return '/staff';
+  return '/';
+};
+
+const selectedKeys = ref([getActiveKey(route.path)]);
 
 const user = computed(() => authStore.user);
 
 watch(route, (newRoute) => {
-  selectedKeys.value = [newRoute.path];
+  selectedKeys.value = [getActiveKey(newRoute.path)];
 });
 
 const handleMenuClick = ({ key }) => {

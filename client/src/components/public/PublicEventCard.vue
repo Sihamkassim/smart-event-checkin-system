@@ -1,12 +1,12 @@
 <template>
-  <a-card hoverable class="public-event-card">
+  <a-card hoverable class="mb-4">
     <template #title>
-      <div class="card-title">
+      <div class="flex items-center gap-2">
         <CalendarOutlined />
         <span>{{ event.name }}</span>
       </div>
     </template>
-    <div class="event-details">
+    <div class="[&_p]:my-2 [&_p]:flex [&_p]:items-center [&_p]:gap-2 [&_p]:text-slate-500">
       <p><EnvironmentOutlined /> {{ event.location }}</p>
       <p><ClockCircleOutlined /> {{ formatDate(event.date) }}</p>
       <p><UserOutlined /> {{ event.registered_count || 0 }} registered</p>
@@ -40,23 +40,3 @@ const handleRegister = () => {
   emit('register', props.event.id);
 };
 </script>
-
-<style scoped>
-.public-event-card {
-  margin-bottom: 16px;
-}
-
-.card-title {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.event-details p {
-  margin: 8px 0;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  color: #666;
-}
-</style>

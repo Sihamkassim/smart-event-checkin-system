@@ -1,5 +1,5 @@
 <template>
-  <div class="visitor-search">
+  <div class="mb-4">
     <a-input-search
       v-model:value="searchQuery"
       placeholder="Search visitors by name, email, or phone"
@@ -40,9 +40,3 @@ const handleSearchChange = (e) => {
   }
 };
 </script>
-
-<style scoped>
-.visitor-search {
-  margin-bottom: 16px;
-}
-</style>

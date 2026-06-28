@@ -25,7 +25,7 @@
           v-model:value="searchQuery"
           placeholder="Search events..."
           size="large"
-          class="w-full custom-search"
+          class="w-full [&_.ant-input-wrapper]:rounded-lg [&_.ant-input-wrapper]:overflow-hidden"
         />
       </div>
       
@@ -122,10 +122,3 @@ const handleDelete = async (eventId) => {
   await eventStore.deleteEvent(eventId);
 };
 </script>
-
-<style>
-.custom-search .ant-input-wrapper {
-  border-radius: 8px;
-  overflow: hidden;
-}
-</style>

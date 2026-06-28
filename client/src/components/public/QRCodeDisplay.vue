@@ -1,10 +1,10 @@
 <template>
-  <div class="qr-code-display">
+  <div class="max-w-[300px] mx-auto">
     <a-card title="Your Check-in QR Code">
-      <div class="qr-code">
+      <div class="flex justify-center my-4">
         <QRCodeVue :value="token" :size="size" />
       </div>
-      <p class="token-text">Token: <strong>{{ token }}</strong></p>
+      <p class="text-center my-4 text-slate-500">Token: <strong>{{ token }}</strong></p>
       <a-button type="primary" block @click="handleDownload">
         Download QR Code
       </a-button>
@@ -31,22 +31,3 @@ const handleDownload = () => {
   console.log('Download QR code for token:', props.token);
 };
 </script>
-
-<style scoped>
-.qr-code-display {
-  max-width: 300px;
-  margin: 0 auto;
-}
-
-.qr-code {
-  display: flex;
-  justify-content: center;
-  margin: 16px 0;
-}
-
-.token-text {
-  text-align: center;
-  margin: 16px 0;
-  color: #666;
-}
-</style>

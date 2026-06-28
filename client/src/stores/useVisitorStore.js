@@ -1,6 +1,7 @@
 import { defineStore } from 'pinia';
 import { ref } from 'vue';
 import { visitorsAPI } from '../api/visitors';
+import { checkinAPI } from '../api/checkin';
 
 export const useVisitorStore = defineStore('visitor', () => {
   const visitors = ref([]);
@@ -52,10 +53,10 @@ export const useVisitorStore = defineStore('visitor', () => {
     }
   };
 
-  const bulkCreateVisitors = async (eventId, visitorsData) => {
+  const bulkCreateVisitors = async (eventId, visitorsData, sendEmails = false) => {
     isLoading.value = true;
     try {
-      const response = await visitorsAPI.bulkCreate(eventId, visitorsData);
+      const response = await visitorsAPI.bulkCreate(eventId, visitorsData, sendEmails);
       // Re-fetch visitors to get the updated list including tokens
       await fetchVisitorsByEvent(eventId);
       return { success: true, count: response.count };
@@ -101,6 +102,25 @@ export const useVisitorStore = defineStore('visitor', () => {
     }
   };
 
+  const checkInVisitor = async (eventId, token) => {
+    isLoading.value = true;
+    try {
+      // Import dynamically or assume it exists in a separate file if needed.
+      // Wait, we can import checkinAPI at the top.
+      const response = await checkinAPI.checkIn(token);
+      // If success, refresh the visitors list to reflect check-in status
+      if (response.success) {
+        await fetchVisitorsByEvent(eventId);
+        return true;
+      }
+      return false;
+    } catch (err) {
+      return false;
+    } finally {
+      isLoading.value = false;
+    }
+  };
+
   return {
     visitors,
     currentVisitor,
@@ -112,5 +132,6 @@ export const useVisitorStore = defineStore('visitor', () => {
     bulkCreateVisitors,
     updateVisitor,
     deleteVisitor,
+    checkInVisitor,
   };
 });

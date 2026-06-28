@@ -2,6 +2,7 @@ import app from './src/app';
 
 import  sequelize  from './src/config/database';
 import { startStatsCron } from "./src/cron/statsCron";
+import { startEventCron } from "./src/cron/eventCron";
 
 const PORT = process.env.PORT || 5000;
 
@@ -19,6 +20,7 @@ const startServer = async () => {
 
     // Start cron jobs
     startStatsCron();
+    startEventCron();
 
     // Start server
     app.listen(PORT, () => {

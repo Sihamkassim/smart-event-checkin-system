@@ -1,6 +1,6 @@
 <template>
-  <div class="public-event-list">
-    <h2>Upcoming Events</h2>
+  <div class="w-full">
+    <h2 class="m-0 mb-6 text-2xl font-bold">Upcoming Events</h2>
     
     <LoadingSpinner v-if="isLoading" />
     
@@ -43,11 +43,3 @@ const handleRegister = (eventId) => {
   emit('register', eventId);
 };
 </script>
-
-<style scoped>
-.public-event-list h2 {
-  margin: 0 0 24px 0;
-  font-size: 24px;
-  font-weight: bold;
-}
-</style>

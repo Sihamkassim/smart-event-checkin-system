@@ -1,6 +1,6 @@
 <template>
-  <div class="public-registration-page">
-    <div class="page-header">
+  <div class="p-6 max-w-[600px] mx-auto">
+    <div class="mb-6">
       <a-button @click="goBack">
         <template #icon>
           <ArrowLeftOutlined />
@@ -27,15 +27,3 @@ const goBack = () => {
   router.push('/public');
 };
 </script>
-
-<style scoped>
-.public-registration-page {
-  padding: 24px;
-  max-width: 600px;
-  margin: 0 auto;
-}
-
-.page-header {
-  margin-bottom: 24px;
-}
-</style>

@@ -53,11 +53,16 @@
         </template>
       </a-table>
 
-      <div class="mt-6 flex justify-end gap-3">
-        <a-button @click="$emit('cancel')">Cancel</a-button>
-        <a-button type="primary" :loading="isImporting" @click="handleImport">
-          Import {{ parsedData.length }} Visitors
-        </a-button>
+      <div class="mt-6 flex flex-col sm:flex-row justify-between items-center gap-4 bg-slate-50 p-4 rounded-xl border border-slate-100">
+        <a-checkbox v-model:checked="sendEmails">
+          <span class="font-medium text-slate-700">Send confirmation email tickets to imported visitors</span>
+        </a-checkbox>
+        <div class="flex gap-3 w-full sm:w-auto">
+          <a-button @click="$emit('cancel')" class="flex-1 sm:flex-none">Cancel</a-button>
+          <a-button type="primary" :loading="isImporting" @click="handleImport" class="flex-1 sm:flex-none">
+            Import {{ parsedData.length }} Visitors
+          </a-button>
+        </div>
       </div>
     </div>
   </div>
@@ -84,6 +89,7 @@ const step = ref(1);
 const parsedData = ref([]);
 const totalParsed = ref(0);
 const isImporting = ref(false);
+const sendEmails = ref(true);
 
 const previewColumns = [
   { title: 'Full Name', dataIndex: 'full_name', key: 'full_name' },
@@ -157,7 +163,7 @@ const handleImport = async () => {
   if (!parsedData.value.length) return;
   
   isImporting.value = true;
-  const result = await visitorStore.bulkCreateVisitors(props.eventId, parsedData.value);
+  const result = await visitorStore.bulkCreateVisitors(props.eventId, parsedData.value, sendEmails.value);
   isImporting.value = false;
   
   if (result.success) {

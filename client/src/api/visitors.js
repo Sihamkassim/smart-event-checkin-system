@@ -37,8 +37,8 @@ export const visitorsAPI = {
     return response.data;
   },
 
-  bulkCreate: async (eventId, visitorsData) => {
-    const response = await apiClient.post(`/visitors/${eventId}/visitors/bulk`, { visitors: visitorsData });
+  bulkCreate: async (eventId, visitorsData, sendEmails = false) => {
+    const response = await apiClient.post(`/visitors/${eventId}/visitors/bulk`, { visitors: visitorsData, sendEmails });
     if (response.data.success) {
       message.success(`${visitorsData.length} visitors imported successfully`);
     }

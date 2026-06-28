@@ -35,20 +35,3 @@ import { ScanOutlined } from '@ant-design/icons-vue';
 
 const appName = import.meta.env.VITE_APP_NAME || 'Lahn Event';
 </script>
-
-<style scoped>
-.animate-fade-in-up {
-  animation: fadeInUp 0.6s ease-out both;
-}
-
-@keyframes fadeInUp {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-</style>
